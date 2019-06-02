@@ -1,0 +1,53 @@
+package com.sample
+ 
+import com.sample.Attest.Message;
+
+ 
+rule "1"
+	no-loop true
+    when
+        m : Message( kartegueltig == 'n' )
+    then
+        System.out.println('Karte ausgeben');
+        update( m );
+end
+rule "2"
+	no-loop true
+    when
+        m : Message( pinrichtig == 'n', pin2malfalsch == 'j' )
+    then
+        System.out.println('Karte sperren und ausgeben');
+        update( m );
+end
+rule "3"
+	no-loop true
+    when
+        m : Message( pinrichtig == 'j', geldgenug == 'j' )
+    then
+        System.out.println('Karte und Geld ausgeben');
+        update( m );
+end
+rule "4"
+	no-loop true
+    when
+        m : Message( pinrichtig == 'j', geldgenug == 'n' )
+    then
+        System.out.println('Noch mal versuchen, Geld nicht genug');
+        update( m );
+end
+rule "5"
+	no-loop true
+    when
+        m : Message( pinrichtig == 'n', pin2malfalsch == 'n', geldgenug == 'n' )
+    then
+        System.out.println('Noch mal versuchen, falsches Pin, Geld nicht genug');
+        update( m );
+end
+rule "6"
+	no-loop true
+    when
+        m : Message( pinrichtig == 'n', pin2malfalsch == 'n', geldgenug == 'j' )
+    then
+        System.out.println('Noch mal versuchen, falsches Pin');
+        update( m );
+end
